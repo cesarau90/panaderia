@@ -17,7 +17,6 @@ function App() {
     const [orden, setOrden] = useState("nombre-az")
     const [error, setError] = useState("")
 
-    // al cargar la pagina traemos los productos de supabase
     useEffect(() => {
         const cargar = async () => {
             const { data, error } = await supabase.from("productos").select("*")
@@ -72,7 +71,6 @@ function App() {
         cargarProductos()
     }
 
-    // decidimos si crear o editar segun si hay productoEditar
     const handleGuardar = (nombre: string, descripcion: string, precio: number, categoria: string, imagen: string) => {
         setError("")
         if (productoEditar) {
@@ -93,7 +91,6 @@ function App() {
         setError("")
     }
 
-    // filtramos y ordenamos los productos segun lo que eligio el usuario
     const productosFiltrados = productos
         .filter(p => categoriaFiltro === "todos" || p.categoria === categoriaFiltro)
         .filter(p => p.nombre.toLowerCase().includes(busqueda.toLowerCase()))
@@ -108,75 +105,74 @@ function App() {
     const promedio = total > 0 ? (productos.reduce((acc, p) => acc + p.precio, 0) / total).toFixed(2) : "0.00"
 
     return (
-        <>
-            <div className="app">
-                <header className="app-header">
-                    <h1>Panadería</h1>
-                    <p className="app-subtitulo">Sistema de gestión de productos</p>
-                </header>
+        <div className="app">
+            <header className="app-header">
+                <h1>Panadería</h1>
+                <p className="app-subtitulo">Sistema de gestión de productos</p>
+            </header>
 
-                <div className="estadisticas">
-                    <div className="stat-card">
-                        <h4>Total productos</h4>
-                        <span>{total}</span>
-                    </div>
-                    <div className="stat-card">
-                        <h4>Precio promedio</h4>
-                        <span>${promedio}</span>
-                    </div>
+            <div className="estadisticas">
+                <div className="stat-card">
+                    <h4>Total productos</h4>
+                    <span>{total}</span>
                 </div>
-
-                <div className="controles">
-                    <div className="filtros-categoria">
-                        <button className={categoriaFiltro === "todos" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("todos")}>Todos</button>
-                        <button className={categoriaFiltro === "pan" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("pan")}>Pan</button>
-                        <button className={categoriaFiltro === "pastel" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("pastel")}>Pastel</button>
-                        <button className={categoriaFiltro === "galletas" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("galletas")}>Galletas</button>
-                        <button className={categoriaFiltro === "bebida" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("bebida")}>Bebida</button>
-                    </div>
-
-                    <div className="controles-busqueda">
-                        <input
-                            type="text"
-                            placeholder="Buscar por nombre..."
-                            value={busqueda}
-                            onChange={(e) => setBusqueda(e.target.value)}
-                            className="input-busqueda"
-                        />
-                        <select value={orden} onChange={(e) => setOrden(e.target.value)} className="select-orden">
-                            <option value="nombre-az">Nombre A-Z</option>
-                            <option value="precio-asc">Precio: menor a mayor</option>
-                            <option value="precio-desc">Precio: mayor a menor</option>
-                        </select>
-                        <button className="btn-nuevo" onClick={() => { setMostrarForm(true); setProductoEditar(null) }}>
-                            + Nuevo Producto
-                        </button>
-                    </div>
+                <div className="stat-card">
+                    <h4>Precio promedio</h4>
+                    <span>${promedio}</span>
                 </div>
-
-                {error && <p className="mensaje-error">{error}</p>}
-
-                {mostrarForm && (
-                    <ProductoForm
-                        productoEditar={productoEditar}
-                        onGuardar={handleGuardar}
-                        onCancelar={handleCancelar}
-                    />
-                )}
-
-                <ProductoList
-                    productos={productosFiltrados}
-                    onEditar={handleEditar}
-                    onEliminar={(p) => setProductoEliminar(p)}
-                />
-
-                <DeleteModal
-                    producto={productoEliminar}
-                    onConfirmar={eliminarProducto}
-                    onCancelar={() => setProductoEliminar(null)}
-                />
             </div>
-        </>
+
+            <div className="controles">
+                <div className="filtros-categoria">
+                    <button className={categoriaFiltro === "todos" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("todos")}>Todos</button>
+                    <button className={categoriaFiltro === "pan" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("pan")}>Pan</button>
+                    <button className={categoriaFiltro === "pastel" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("pastel")}>Pastel</button>
+                    <button className={categoriaFiltro === "galletas" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("galletas")}>Galletas</button>
+                    <button className={categoriaFiltro === "bebida" ? "btn-filtro activo" : "btn-filtro"} onClick={() => setCategoriaFiltro("bebida")}>Bebida</button>
+                </div>
+
+                <div className="controles-busqueda">
+                    <input
+                        type="text"
+                        placeholder="Buscar por nombre..."
+                        value={busqueda}
+                        onChange={(e) => setBusqueda(e.target.value)}
+                        className="input-busqueda"
+                    />
+                    <select value={orden} onChange={(e) => setOrden(e.target.value)} className="select-orden">
+                        <option value="nombre-az">Nombre A-Z</option>
+                        <option value="precio-asc">Precio: menor a mayor</option>
+                        <option value="precio-desc">Precio: mayor a menor</option>
+                    </select>
+                    <button className="btn-nuevo" onClick={() => { setMostrarForm(true); setProductoEditar(null) }}>
+                        + Nuevo Producto
+                    </button>
+                </div>
+            </div>
+
+            {error && <p className="mensaje-error">{error}</p>}
+
+            {mostrarForm && (
+                <ProductoForm
+                    key={productoEditar ? productoEditar.id : "nuevo"}
+                    productoEditar={productoEditar}
+                    onGuardar={handleGuardar}
+                    onCancelar={handleCancelar}
+                />
+            )}
+
+            <ProductoList
+                productos={productosFiltrados}
+                onEditar={handleEditar}
+                onEliminar={(p) => setProductoEliminar(p)}
+            />
+
+            <DeleteModal
+                producto={productoEliminar}
+                onConfirmar={eliminarProducto}
+                onCancelar={() => setProductoEliminar(null)}
+            />
+        </div>
     )
 }
 
