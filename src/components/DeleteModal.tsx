@@ -7,23 +7,23 @@ interface Props {
 }
 
 function DeleteModal({ producto, onConfirmar, onCancelar }: Props) {
+
+    // si no hay producto seleccionado no mostramos nada
     if (!producto) return null
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-box">
-                <h3>¿Eliminar producto?</h3>
-                <p>Estás a punto de eliminar <strong>{producto.nombre}</strong>. Esta acción no se puede deshacer.</p>
-                <div className="modal-botones">
-                    <button className="btn-eliminar" onClick={onConfirmar}>
-                        Sí, eliminar
-                    </button>
-                    <button className="btn-cancelar" onClick={onCancelar}>
-                        Cancelar
-                    </button>
+        <>
+            <div className="modal-overlay">
+                <div className="modal-box">
+                    <h3>¿Eliminar producto?</h3>
+                    <p>Vas a eliminar <strong>{producto.nombre}</strong>. Esta acción no se puede deshacer.</p>
+                    <div className="modal-botones">
+                        <button className="btn-eliminar" onClick={onConfirmar}>Sí, eliminar</button>
+                        <button className="btn-cancelar" onClick={onCancelar}>Cancelar</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
