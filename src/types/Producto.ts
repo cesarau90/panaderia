@@ -4,5 +4,6 @@ export interface Producto {
     descripcion: string
     precio: number
     categoria: 'pan' | 'pastel' | 'galletas' | 'bebida'
+    imagen: string
     created_at: string
 }

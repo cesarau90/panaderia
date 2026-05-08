@@ -387,6 +387,37 @@ body {
     justify-content: center;
 }
 
+/* IMÁGENES */
+.img-tabla {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.img-placeholder {
+    width: 60px;
+    height: 60px;
+    background: #2a2a3a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: #666;
+    text-align: center;
+}
+
+.img-preview {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e040fb44;
+    margin-top: 4px;
+}
+
 /* RESPONSIVE */
 @media (max-width: 700px) {
     .estadisticas {

@@ -16,21 +16,29 @@ function App() {
     const [orden, setOrden] = useState("nombre-az")
     const [error, setError] = useState("")
 
-    useEffect(() => {
-        cargarProductos()
-    }, [])
-
     const cargarProductos = async () => {
         const { data, error } = await supabase.from("productos").select("*")
         if (error) {
             setError("Error al cargar productos")
             return
         }
-        setProductos(data)
+        setProductos(data ?? [])
     }
 
-    const crearProducto = async (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida') => {
-        const { error } = await supabase.from("productos").insert([{ nombre, descripcion, precio, categoria }])
+    useEffect(() => {
+        const cargar = async () => {
+            const { data, error } = await supabase.from("productos").select("*")
+            if (error) {
+                setError("Error al cargar productos")
+                return
+            }
+            setProductos(data ?? [])
+        }
+        cargar()
+    }, [])
+
+    const crearProducto = async (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida', imagen: string) => {
+        const { error } = await supabase.from("productos").insert([{ nombre, descripcion, precio, categoria, imagen }])
         if (error) {
             setError("Error al crear el producto")
             return
@@ -39,9 +47,9 @@ function App() {
         cargarProductos()
     }
 
-    const editarProducto = async (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida') => {
+    const editarProducto = async (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida', imagen: string) => {
         if (!productoEditar) return
-        const { error } = await supabase.from("productos").update({ nombre, descripcion, precio, categoria }).eq("id", productoEditar.id)
+        const { error } = await supabase.from("productos").update({ nombre, descripcion, precio, categoria, imagen }).eq("id", productoEditar.id)
         if (error) {
             setError("Error al editar el producto")
             return
@@ -62,12 +70,12 @@ function App() {
         cargarProductos()
     }
 
-    const handleGuardar = (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida') => {
+    const handleGuardar = (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida', imagen: string) => {
         setError("")
         if (productoEditar) {
-            editarProducto(nombre, descripcion, precio, categoria)
+            editarProducto(nombre, descripcion, precio, categoria, imagen)
         } else {
-            crearProducto(nombre, descripcion, precio, categoria)
+            crearProducto(nombre, descripcion, precio, categoria, imagen)
         }
     }
 

@@ -3,7 +3,7 @@ import type { Producto } from "../types/Producto"
 
 interface Props {
     productoEditar: Producto | null
-    onGuardar: (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida') => void
+    onGuardar: (nombre: string, descripcion: string, precio: number, categoria: 'pan' | 'pastel' | 'galletas' | 'bebida', imagen: string) => void
     onCancelar: () => void
 }
 
@@ -12,6 +12,7 @@ function ProductoForm({ productoEditar, onGuardar, onCancelar }: Props) {
     const [descripcion, setDescripcion] = useState("")
     const [precio, setPrecio] = useState(0)
     const [categoria, setCategoria] = useState<'pan' | 'pastel' | 'galletas' | 'bebida'>("pan")
+    const [imagen, setImagen] = useState("")
 
     useEffect(() => {
         if (productoEditar) {
@@ -19,17 +20,19 @@ function ProductoForm({ productoEditar, onGuardar, onCancelar }: Props) {
             setDescripcion(productoEditar.descripcion)
             setPrecio(productoEditar.precio)
             setCategoria(productoEditar.categoria)
+            setImagen(productoEditar.imagen || "")
         } else {
             setNombre("")
             setDescripcion("")
             setPrecio(0)
             setCategoria("pan")
+            setImagen("")
         }
     }, [productoEditar])
 
     const handleSubmit = () => {
         if (!nombre || precio <= 0) return
-        onGuardar(nombre, descripcion, precio, categoria)
+        onGuardar(nombre, descripcion, precio, categoria, imagen)
     }
 
     return (
@@ -70,6 +73,18 @@ function ProductoForm({ productoEditar, onGuardar, onCancelar }: Props) {
                 <option value="galletas">Galletas</option>
                 <option value="bebida">Bebida</option>
             </select>
+
+            <label><h4>URL de imagen (opcional)</h4></label>
+            <input
+                type="text"
+                value={imagen}
+                onChange={(e) => setImagen(e.target.value)}
+                placeholder="https://ejemplo.com/imagen.jpg"
+            />
+
+            {imagen && (
+                <img src={imagen} alt="preview" className="img-preview" />
+            )}
 
             <div className="form-botones">
                 <button className="btn-guardar" onClick={handleSubmit}>

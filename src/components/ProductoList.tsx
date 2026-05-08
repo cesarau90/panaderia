@@ -15,6 +15,7 @@ function ProductoList({ productos, onEditar, onEliminar }: Props) {
         <table className="tabla-productos">
             <thead>
                 <tr>
+                    <th>Imagen</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Precio</th>
@@ -25,6 +26,12 @@ function ProductoList({ productos, onEditar, onEliminar }: Props) {
             <tbody>
                 {productos.map((p) => (
                     <tr key={p.id}>
+                        <td>
+                            {p.imagen
+                                ? <img src={p.imagen} alt={p.nombre} className="img-tabla" />
+                                : <div className="img-placeholder">Sin imagen</div>
+                            }
+                        </td>
                         <td>{p.nombre}</td>
                         <td>{p.descripcion || "—"}</td>
                         <td>${p.precio.toFixed(2)}</td>
